@@ -1,24 +1,9 @@
-# backstage616
+# 連鎖火鍋店運營後台
+這是一個真實的連鎖火鍋店運營後台項目,以echart與elementUI作主要的數據可視化與UI框架。項目使用了slack api數據接口,但敏感資料已經被隱藏。
 
-## Project setup
-```
-yarn install
-```
+## 主要功能包括
+- 外賣訂單數據可視化
+- 訂座數據可視化
+- 訂座及外賣應用的配置修改
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## 截圖
