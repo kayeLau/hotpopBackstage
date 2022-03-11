@@ -1,5 +1,5 @@
 import axios from 'axios'
-const slackToken = 'xoxb-3069594536567-3077559521446-aoXGsRV5XGEA1JySfYBqD2IY'
+const slackToken = 'your token'
 
 
 axios.defaults.timeout = 50000;
