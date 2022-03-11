@@ -1,0 +1,39 @@
+html{
+  --common-baseont-family: "Roboto", "Noto", sans-serif;
+  font-family: var(--common-baseont-family);
+}
+
+
+.card-picker{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+  }
+  .card-picker .el-dropdown-link {
+    cursor: pointer;
+    color: var(--el-color-primary);
+    display: flex;
+    align-items: center;
+  }
+  .box-card{
+    height: 320px;
+  }
+  .box-card-title{
+    font-weight: bold;
+  }
+  .box-card-liquid{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 200px;
+  }
+  .card-header{
+      display: flex;
+      justify-content: space-between;
+  }
+  .box-card-liquid-subtitle{
+    font-weight: 400;
+  }
