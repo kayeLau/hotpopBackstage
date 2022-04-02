@@ -1,9 +1,12 @@
 html{
   --common-baseont-family: "Roboto", "Noto", sans-serif;
+  --background-color-light:#f3f6fd;
   font-family: var(--common-baseont-family);
 }
 
-
+.el-card{
+  --el-card-border-radius:15px;
+}
 .card-picker{
     display: flex;
     justify-content: flex-end;

@@ -15,7 +15,6 @@
         ref="salesVolume"
         name="salesVolume"
         title="外賣銷量"
-        :chartData="historyMsg"
         :chartIndex="0"
         @updateChartView="getHistoryMsg"
       ></chart>
@@ -62,7 +61,7 @@ export default {
     }
 
     async function getChannelsList() {
-      await RequireApi.getHttp("/api/conversations.list?pretty=1").then(res => {
+      await RequireApi.getHttp("/api/conversations.list").then(res => {
         res.data.channels.forEach(item => {
           channelsList[item.name] = item.id;
         });
@@ -89,13 +88,11 @@ export default {
             ? historyMsgInPay.push(item)
             : null;
         });
-        // console.log(historyMsg);
-        console.log(historyMsgInPay);
       });
       if (option.isfirst) {
         historyMsg.forEach(item => (totalSalesMonth.value += moneyAmountFromatter(item)));
         historyMsgInPay.forEach(item => (totalSalesMonthInPay.value += moneyAmountFromatter(item)));
-        rate = (1 - historyMsgInPay.length / historyMsg.length).toFixed(2);
+        rate = ((1 - historyMsgInPay.length / historyMsg.length) || 0).toFixed(2);
         dumpBill.value.drawChart(rate);
         getPopularProduct(historyMsgInPay)
       }

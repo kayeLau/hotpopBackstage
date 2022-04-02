@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import dataPage from '../views/dataPage.vue'
+import takeawayDataPage from '../views/takeawayDataPage.vue'
 import settingPage from '../views/settingPage.vue'
 import homePage from '../views/homePage.vue'
 
@@ -10,9 +10,9 @@ const routes = [
     component: homePage
   },
   {
-    path: '/dataPage',
-    name: 'dataPage',
-    component: dataPage
+    path: '/takeawayDataPage',
+    name: 'takeawayDataPage',
+    component: takeawayDataPage
   },
   {
     path: '/settingPage',

@@ -23,6 +23,8 @@ export default {
     }
 
     function drawChart(rate) {
+      console.log(rate)
+      rate = rate || 0;
       const liquiddata = [rate];
       myChart.setOption({
         // 数据

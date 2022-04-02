@@ -21,7 +21,7 @@
           <el-button-group>
             <el-button
               :type="index === listsort ? 'primary' : null"
-              v-for="(item,index) in daylist"
+              v-for="(item,index) in ['本日','本周']"
               :key="index"
               @click="listChange(index)"
             >{{item}}</el-button>
@@ -109,15 +109,14 @@ export default {
     }
     // 繪圖
     function drawChart(chartData) {
-      let data;
-      if (chartData) {
-        sessionStorage.setItem("chartData", JSON.stringify(chartData));
-        data = chartData;
-      } else {
-        data = JSON.parse(sessionStorage.getItem("chartData"));
-      }
+      // if (chartData) {
+      //   sessionStorage.setItem("chartData", JSON.stringify(chartData));
+      //   data = chartData;
+      // } else {
+      //   data = JSON.parse(sessionStorage.getItem("chartData"));
+      // }
       const fullOption = assembleDataToOption(
-        getTransactions(data),
+        getTransactions(chartData),
         gernerateXaxis()
       );
       myChart.setOption(fullOption);
@@ -225,14 +224,9 @@ export default {
     return {
       listChange,
       listsort,
-      drawChart
+      drawChart,
     };
   },
-  data() {
-    return {
-      daylist: ["本周", "本月"]
-    };
-  }
 };
 </script>
 
