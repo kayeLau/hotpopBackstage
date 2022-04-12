@@ -7,6 +7,9 @@ html{
 .el-card{
   --el-card-border-radius:15px;
 }
+.el-button{
+  --el-border-radius-base: 15px;
+}
 .card-picker{
     display: flex;
     justify-content: flex-end;

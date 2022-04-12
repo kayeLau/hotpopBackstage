@@ -5,7 +5,7 @@
     </el-icon>
   </el-menu-item>
 
-  <el-sub-menu v-else>
+  <el-sub-menu v-else :index="item.router">
     <template #title>
       <el-icon :size="50">
         <Icon :icon="item.icon"></Icon>
@@ -24,6 +24,7 @@
 <script>
 import { toRef } from "vue";
 export default {
+  name:'subMenu',
   props: {
     detail: Object
   },

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-container style="height:100vh">
+    <el-container style='height:100vh;overflow:hidden'>
       <el-header class="header flex">
         <div class="icon"></div>
         <div class="flex">
@@ -15,15 +15,11 @@
             :default-active="menuIndex"
             mode="vertical"
             :collapse="true"
+            :unique-opened="true"
             router
             background-color="#f3f6fd"
           >
-            <subMenu
-              v-for="(item,index) in menuList"
-              :key="index"
-              :detail="item"
-              class="menu"
-            ></subMenu>
+            <subMenu v-for="(item,index) in menuList" :key="index" :detail="item" class="menu"></subMenu>
           </el-menu>
 
           <!-- <el-switch v-model="iscollapse" /> -->
@@ -54,7 +50,7 @@ export default {
         {
           name: "數據",
           icon: "Histogram",
-          router:"dataPage",
+          router: "dataPage",
           children: [
             {
               name: "外賣數據",
@@ -69,7 +65,17 @@ export default {
         {
           name: "配置",
           icon: "Setting",
-          router: "settingPage"
+          router: "settingPage",
+          children: [
+            {
+              name: "預警配置",
+              router: "settingPage"
+            },
+            {
+              name: "訂座配置",
+              router: "bookingsetting"
+            }
+          ]
         }
       ]
     };
@@ -86,6 +92,8 @@ export default {
 </script>
 <style scoped>
 .main {
+  height: calc(100vh - 80px);
+  overflow-y: scroll;
   background-color: var(--background-color-light);
 }
 .aside {

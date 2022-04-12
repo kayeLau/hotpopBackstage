@@ -3,7 +3,10 @@
     <div class="page-header">
       <el-card :body-style="{ padding:'5px'}">
         <div class="page-header-box">
-          <liquidChart ref="dumpBill" name="dumpBill" title="甩單率"></liquidChart>
+          <div class='liquid-chart box-card-liquid-subtitle'>
+            <liquidChart ref="dumpBill" name="dumpBill" title="甩單數量百分比"></liquidChart>
+            <liquidChart ref="dumpBillVolum" name="dumpBillVolum" title="損失金額百分比"></liquidChart>
+          </div>
           <textChart title="本月訂單總額" :sales="totalSalesMonth"></textChart>
           <textChart title="本月成交總額" :sales="totalSalesMonthInPay"></textChart>
         </div>
@@ -24,7 +27,7 @@
   </div>
 </template>
 <script>
-import { RequireApi } from "../util/require";
+import { slack } from "../util/require";
 import { onMounted, ref } from "vue";
 import chart from "../components/echart";
 import liquidChart from "../components/liquidChart";
@@ -38,9 +41,9 @@ export default {
     tableChart
   },
   setup() {
-    const bot_id = "B0321HZL97Z";
     const salesVolume = ref(null);
     const dumpBill = ref(null);
+    const dumpBillVolum = ref(null);
     let totalSalesMonth = ref(0);
     let totalSalesMonthInPay = ref(0);
     let channelsList = {};
@@ -61,7 +64,7 @@ export default {
     }
 
     async function getChannelsList() {
-      await RequireApi.getHttp("/api/conversations.list").then(res => {
+      await slack.get("/conversations.list").then(res => {
         res.data.channels.forEach(item => {
           channelsList[item.name] = item.id;
         });
@@ -75,15 +78,15 @@ export default {
         option.range === "week" ? getTimeStamp("week") : getTimeStamp("month");
       let channel = channelsList[option.shop];
       let rate = 0;
-      await RequireApi.getHttp(
-        `/api/conversations.history?channel=${channel}&pretty=1&oldest=${startTime}`
+      let lostvolumeRate = 0;
+      await slack.get(
+        `/conversations.history?channel=${channel}&pretty=1&oldest=${startTime}`
       ).then(res => {
         res.data.messages.forEach(item => {
-          item.subtype === "bot_message" && item.bot_id === bot_id
+          item.subtype === "bot_message"
             ? historyMsg.push(item)
             : null;
-          item.subtype === "bot_message" &&
-          item.bot_id === bot_id &&
+          item.subtype === "bot_message"
           item.reactions
             ? historyMsgInPay.push(item)
             : null;
@@ -93,7 +96,9 @@ export default {
         historyMsg.forEach(item => (totalSalesMonth.value += moneyAmountFromatter(item)));
         historyMsgInPay.forEach(item => (totalSalesMonthInPay.value += moneyAmountFromatter(item)));
         rate = ((1 - historyMsgInPay.length / historyMsg.length) || 0).toFixed(2);
+        lostvolumeRate = ((totalSalesMonth.value - totalSalesMonthInPay.value)/totalSalesMonth.value).toFixed(2);
         dumpBill.value.drawChart(rate);
+        dumpBillVolum.value.drawChart(lostvolumeRate);
         getPopularProduct(historyMsgInPay)
       }
       salesVolume.value.drawChart([historyMsg, historyMsgInPay]);
@@ -123,8 +128,8 @@ export default {
       popularProduct.value.forEach(item =>{
         item.value = item.value + '份'
       })
-      console.log(filterObj)
-      console.log(Object.values(filterObj))
+      // console.log(filterObj)
+      // console.log(Object.values(filterObj))
     }
     function moneyAmountFromatter(item) {
       return parseInt(
@@ -144,6 +149,7 @@ export default {
       channelsList,
       salesVolume,
       dumpBill,
+      dumpBillVolum,
       totalSalesMonth,
       totalSalesMonthInPay,
       getHistoryMsg,
@@ -171,5 +177,10 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+}
+.liquid-chart{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 </style>

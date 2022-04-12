@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import takeawayDataPage from '../views/takeawayDataPage.vue'
 import settingPage from '../views/settingPage.vue'
+import bookingSetting from '../views/bookingSetting.vue'
 import homePage from '../views/homePage.vue'
 
 const routes = [
@@ -18,6 +19,11 @@ const routes = [
     path: '/settingPage',
     name: 'settingPage',
     component: settingPage
+  },
+  {
+    path: '/bookingSetting',
+    name: 'bookingSetting',
+    component: bookingSetting
   }
 ]
 

@@ -21,7 +21,7 @@
           <el-button-group>
             <el-button
               :type="index === listsort ? 'primary' : null"
-              v-for="(item,index) in ['本日','本周']"
+              v-for="(item,index) in ['本周','本月']"
               :key="index"
               @click="listChange(index)"
             >{{item}}</el-button>

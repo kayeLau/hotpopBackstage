@@ -12,8 +12,10 @@ export default {
     title:String
   },
   setup(props) {
-    let criclecolor = "#EF525B";
-    let insedecolor = ["#EF525B"];
+    // let criclecolor_red = "#EF525B";
+    // let insedecolor_red = ["#EF525B"];
+    // let criclecolor_blue = "#EF525B";
+    // let insedecolor_blue = ["#EF525B"];
     let myChart = null;
 
     function init(){
@@ -26,6 +28,8 @@ export default {
       console.log(rate)
       rate = rate || 0;
       const liquiddata = [rate];
+      const criclecolor = liquiddata > 0.8 ? '#EF525B' : '#409eff';
+      const insedecolor = liquiddata > 0.8 ? ['#EF525B'] : ['#409eff'];
       myChart.setOption({
         // 数据
         backgroundColor: "#ffffff",
