@@ -3,13 +3,7 @@
     <el-card>
       <h2>{{name}}</h2>
       <h3>{{subname}}</h3>
-      <el-row
-        :gutter="20"
-        v-for="(item,index) of list"
-        :key="index"
-        class="pd10"
-        :justify="jsutify"
-      >
+      <el-row :gutter="20" v-for="(item,index) of list" :key="index" class="pd5" :justify="jsutify">
         <el-col v-if="item.key" :xs="24" :sm="24" :md="4" :lg="2" :xl="2">
           <span class="title">{{item.key}}</span>
           <el-tooltip
@@ -35,9 +29,15 @@
             :format-tooltip="item.format"
           />
           <!-- 輸入框 -->
-          <el-input v-else-if="item.type === 'inputString'" v-model="item.value" />
+          <el-input
+            v-else-if="item.type === 'inputString'"
+            v-model="item.value"
+            :readonly="item.readonly"
+            :placeholder="item.placeholder || '請輸入'"
+          />
           <el-input-number
             v-else-if="item.type === 'inputNumber'"
+            :placeholder="item.placeholder || '請輸入'"
             v-model="item.value"
             :max="item.max"
             :min="item.min"
@@ -103,28 +103,34 @@
         :inputDate="item.children"
         :showButton="false"
       ></inputFrom>
-      <el-row justify="start" class="pd10" v-if="showButton">
+      <el-row justify="start" class="pd5" v-if="showTimeStepOption">
         <el-button class="add" type="primary" @click="addBookingTimestep">新增時段+</el-button>
         <el-button class="add" type="danger" @click="addBookingTimestep">刪除時段</el-button>
       </el-row>
     </div>
-    <el-row justify="center" class="pd10" v-if="showButton">
+    <el-row justify="center" class="pd5" v-if="showButton">
       <el-button class="submit" type="primary" @click="submitData" size="large">提交</el-button>
     </el-row>
   </div>
 </template>
 <script>
-import { reactive, computed } from "vue";
+import { reactive, computed, getCurrentInstance } from "vue";
+import { useRouter } from "vue-router";
 export default {
   name: "inputFrom",
   props: {
     id: String,
     name: String,
+    shopid: String,
     subname: String,
     inputDate: Array,
     showButton: {
       type: Boolean,
       default: true
+    },
+    showTimeStepOption: {
+      type: Boolean,
+      default: false
     },
     jsutify: {
       type: String,
@@ -132,38 +138,59 @@ export default {
     }
   },
   setup(props) {
+    const router = useRouter();
+    const internalInstance = getCurrentInstance();
+    const util = internalInstance.appContext.config.globalProperties.util;
     let list = reactive([]);
 
     let childrenList = computed(() => {
-      return list.filter(item => item.children && item.type === 'group');
+      return list.filter(item => item.children && item.type === "group");
     });
 
     // console.log(childrenList);
-    function setData() {
+    function getLocalData() {
       let localData = JSON.parse(localStorage.getItem(props.id));
-      if (!localData) {
+      if (!localData || !localData[props.shopid]) {
         props.inputDate.map(item => {
           list.push(item);
         });
       } else {
+        if (localData[props.shopid]) {
+          localData = localData[props.shopid];
+        }
         localData.forEach(item => {
           list.push(item);
         });
       }
     }
-    setData();
+    getLocalData();
 
     function submitData() {
-      localStorage.setItem(props.id, JSON.stringify(list));
+      let data = {};
+      let localData = JSON.parse(localStorage.getItem(props.id));
+      if (props.shopid) {
+        reWriteLastEditTime()
+        data[props.shopid] = list;
+        data = { ...localData, ...data };
+      } else {
+        data = list;
+      }
+      localStorage.setItem(props.id, JSON.stringify(data));
+      router.go(-1);
     }
 
-    function addBookingTimestep(){
+    function reWriteLastEditTime(){
+      if(list[0].key === '最後修改時間'){
+        list[0].value = new Date();
+      }
+    }
+    function addBookingTimestep() {
       props.inputDate.forEach(item => {
-        if(item.children){
-          let copyitem = JSON.parse(JSON.stringify(item));
+        if (item.children && item.name === '訂座時段') {
+          let copyitem = util.deepClone(item);
           list.push(copyitem);
         }
-        });
+      });
     }
 
     function timeselectChangeHandler(val) {
@@ -206,7 +233,7 @@ export default {
 h2 {
   position: relative;
   margin-left: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 h2::before {
   content: "";
@@ -216,9 +243,7 @@ h2::before {
   left: -10px;
   background-color: var(--el-color-primary-light-2);
 }
-.pd10 {
-  padding-bottom: 10px;
-}
+
 .container {
   display: flex;
   flex-direction: column;

@@ -54,11 +54,11 @@ export default {
           children: [
             {
               name: "外賣數據",
-              router: "takeawayDataPage"
+              router: "/takeawayDataPage"
             },
             {
               name: "訂座數據",
-              router: "bookingDataPage"
+              router: "/bookingDataPage"
             }
           ]
         },
@@ -69,11 +69,11 @@ export default {
           children: [
             {
               name: "預警配置",
-              router: "settingPage"
+              router: "/setting/unormalSetting"
             },
             {
               name: "訂座配置",
-              router: "bookingsetting"
+              router: "/setting/shopBookingList"
             }
           ]
         }

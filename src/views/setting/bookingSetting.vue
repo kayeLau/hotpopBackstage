@@ -1,20 +1,52 @@
 <template>
   <div>
-    <inputFrom id="bookingInput" name="訂座配置" :inputDate="bookingInput"></inputFrom>
+    <inputFrom
+      id="bookingInput"
+      name="基本配置"
+      :showTimeStepOption="true"
+      :inputDate="bookingInput"
+      :shopid="shopid"
+    ></inputFrom>
   </div>
 </template>
 <script>
-import inputFrom from "../components/inputFrom";
+import inputFrom from "../../components/inputFrom";
+import { useRoute } from "vue-router";
 export default {
+  name: "bookingSetting",
   components: {
     inputFrom
   },
   setup() {
+    const route = useRoute();
+    const shopid = route.query.shopid;
+
     function timeFormatTooltip(val) {
       let minute = String(val).split(".")[1] === "5" ? "30" : "00";
       return String(val).split(".")[0] + ":" + minute;
     }
+    
     let bookingInput = [
+      {
+        type: "hidden",
+        key: "最後修改時間",
+        value: '',
+      },
+      {
+        type: "inputString",
+        key: "分店編號",
+        value: shopid,
+        placeholder: "",
+        span: 6,
+        readonly: true
+      },
+      {
+        type: "inputString",
+        key: "分店名稱",
+        value: "",
+        placeholder: "請輸入分店名稱",
+        span: 6
+      },
       {
         type: "timeselect",
         key: "截止訂座時間",
@@ -130,7 +162,8 @@ export default {
     ];
 
     return {
-      bookingInput
+      bookingInput,
+      shopid
     };
   }
 };

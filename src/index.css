@@ -1,7 +1,14 @@
 html{
   --common-baseont-family: "Roboto", "Noto", sans-serif;
   --background-color-light:#f3f6fd;
+  --el-border-radius-base: 15px;
   font-family: var(--common-baseont-family);
+}
+.pd5 {
+  padding-bottom: 5px;
+}
+.mg10-top {
+  margin-top: 10px;
 }
 
 .el-card{

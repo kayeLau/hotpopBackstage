@@ -1,10 +1,10 @@
 <template>
   <div>
-      <inputFrom id="unnormaInput" name="異常數據預警" :inputDate="unnormalnput"></inputFrom>
+    <inputFrom id="unnormaInput" name="異常數據預警" :inputDate="unnormalnput"></inputFrom>
   </div>
 </template>
 <script>
-import inputFrom from "../components/inputFrom";
+import inputFrom from "../../components/inputFrom";
 // import { reactive } from "vue";
 export default {
   components: {
@@ -28,7 +28,7 @@ export default {
         value: "",
         placeholder: "請選擇",
         span: 10,
-        multiple:true,
+        multiple: true,
         options: [
           {
             value: "SMS",

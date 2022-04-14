@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import takeawayDataPage from '../views/takeawayDataPage.vue'
-import settingPage from '../views/settingPage.vue'
-import bookingSetting from '../views/bookingSetting.vue'
 import homePage from '../views/homePage.vue'
+import shopBookingList from '../views/setting/shopBookingList.vue'
+import settingPage from '../views/setting/unormalSetting.vue'
+import bookingSetting from '../views/setting/bookingSetting.vue'
 
 const routes = [
   {
@@ -16,14 +17,19 @@ const routes = [
     component: takeawayDataPage
   },
   {
-    path: '/settingPage',
+    path: '/setting/unormalSetting',
     name: 'settingPage',
     component: settingPage
   },
   {
-    path: '/bookingSetting',
+    path: '/setting/bookingSetting',
     name: 'bookingSetting',
     component: bookingSetting
+  },
+  {
+    path: '/setting/shopBookingList',
+    name: 'shopBookingList',
+    component: shopBookingList
   }
 ]
 
