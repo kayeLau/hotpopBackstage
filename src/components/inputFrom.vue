@@ -4,8 +4,8 @@
       <h2>{{name}}</h2>
       <h3>{{subname}}</h3>
       <el-row :gutter="20" v-for="(item,index) of list" :key="index" class="pd5" :justify="jsutify">
-        <el-col v-if="item.key" :xs="24" :sm="24" :md="4" :lg="2" :xl="2">
-          <span class="title">{{item.key}}</span>
+        <el-col v-if="item.label" :xs="24" :sm="24" :md="4" :lg="2" :xl="2">
+          <span class="title">{{item.label}}</span>
           <el-tooltip
             v-if="item.description"
             class="box-item"
@@ -64,7 +64,7 @@
             <el-select
               v-for="(itemchildren,index) of item.group"
               :key="index"
-              v-model="itemchildren.value"
+              v-model="item.value[index]"
               :placeholder="item.placeholder"
             >
               <el-option
@@ -116,6 +116,7 @@
 <script>
 import { reactive, computed, getCurrentInstance } from "vue";
 import { useRouter } from "vue-router";
+import useSetting  from '../mixin/useSetting'
 export default {
   name: "inputFrom",
   props: {
@@ -141,6 +142,7 @@ export default {
     const router = useRouter();
     const internalInstance = getCurrentInstance();
     const util = internalInstance.appContext.config.globalProperties.util;
+    const { timeFormat } = useSetting();
     let list = reactive([]);
 
     let childrenList = computed(() => {
@@ -148,28 +150,16 @@ export default {
     });
 
     // console.log(childrenList);
-    function getLocalData() {
-      let localData = JSON.parse(localStorage.getItem(props.id));
-      if (!localData || !localData[props.shopid]) {
-        props.inputDate.map(item => {
-          list.push(item);
-        });
-      } else {
-        if (localData[props.shopid]) {
-          localData = localData[props.shopid];
-        }
-        localData.forEach(item => {
-          list.push(item);
-        });
-      }
-    }
-    getLocalData();
+
+    props.inputDate.map(item => {
+      list.push(item);
+    });
 
     function submitData() {
       let data = {};
       let localData = JSON.parse(localStorage.getItem(props.id));
       if (props.shopid) {
-        reWriteLastEditTime()
+        reWriteLastEditTime();
         data[props.shopid] = list;
         data = { ...localData, ...data };
       } else {
@@ -179,14 +169,14 @@ export default {
       router.go(-1);
     }
 
-    function reWriteLastEditTime(){
-      if(list[0].key === '最後修改時間'){
+    function reWriteLastEditTime() {
+      if (list[0].key === "lastEditTime") {
         list[0].value = new Date();
       }
     }
     function addBookingTimestep() {
       props.inputDate.forEach(item => {
-        if (item.children && item.name === '訂座時段') {
+        if (item.children && item.name === "訂座時段") {
           let copyitem = util.deepClone(item);
           list.push(copyitem);
         }
@@ -204,20 +194,20 @@ export default {
         });
     }
 
-    function timeFormat(val) {
-      let res = "";
-      if (Array.isArray(val)) {
-        val.forEach(item => {
-          let minute = String(item).split(".")[1] === "5" ? "30" : "00";
-          res += String(item).split(".")[0] + ":" + minute;
-          res += " - ";
-        });
-        res = res.substring(0, res.length - 3);
-      } else {
-        res = val;
-      }
-      return res;
-    }
+    // function timeFormat(val) {
+    //   let res = "";
+    //   if (Array.isArray(val)) {
+    //     val.forEach(item => {
+    //       let minute = String(item).split(".")[1] === "5" ? "30" : "00";
+    //       res += String(item).split(".")[0] + ":" + minute;
+    //       res += " - ";
+    //     });
+    //     res = res.substring(0, res.length - 3);
+    //   } else {
+    //     res = val;
+    //   }
+    //   return res;
+    // }
     return {
       list,
       childrenList,

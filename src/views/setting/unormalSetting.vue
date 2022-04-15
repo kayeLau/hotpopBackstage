@@ -14,7 +14,8 @@ export default {
     let unnormalnput = [
       {
         type: "inputNumber",
-        key: "甩單率",
+        label: "甩單率",
+        key:'RejectionRate',
         value: 0,
         placeholder: "",
         span: 10,
@@ -24,7 +25,8 @@ export default {
       },
       {
         type: "select",
-        key: "預警方式",
+        label: "預警方式",
+        key:'warningWay',
         value: "",
         placeholder: "請選擇",
         span: 10,
