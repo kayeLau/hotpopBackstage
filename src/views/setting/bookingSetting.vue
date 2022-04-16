@@ -32,12 +32,13 @@ export default {
       } else {
         list = localData[shopid];
         list[1].value = shopid;
-        list[4].children[0].format = timeFormat
+        for(let i = 4;i < list.length;i++){
+          list[i].children[0].format = timeFormat
+        }
       }
       return list
     }
     let bookingData = getLocalData();
-
     return {
       bookingData,
       shopid

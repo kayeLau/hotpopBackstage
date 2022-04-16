@@ -10,7 +10,9 @@ html{
 .mg10-top {
   margin-top: 10px;
 }
-
+.el-button+.el-button{
+  margin-left: 0;
+}
 .el-card{
   --el-card-border-radius:15px;
 }

@@ -4,8 +4,13 @@ export default function(){
       return String(val).split(".")[0] + ":" + minute;
     }
 
+    function isSameArray(arr1,arr2){
+      return arr1.toString() === arr2.toString();
+    }
+
     function timeFormat(val) {
       let res = "";
+      if(isSameArray(val,['0', '0']))return '';
       if (Array.isArray(val)) {
         val.forEach(item => {
           res += timeFormatTooltip(item);
@@ -83,20 +88,20 @@ export default function(){
                 {
                   options: [
                     {
-                      value: "1hr",
-                      label: "1hr"
+                      value: "1h",
+                      label: "1h"
                     },
                     {
-                      value: "2hr",
-                      label: "2hr"
+                      value: "2h",
+                      label: "2h"
                     },
                     {
-                      value: "3hr",
-                      label: "3hr"
+                      value: "3h",
+                      label: "3h"
                     },
                     {
-                      value: "4hr",
-                      label: "4hr"
+                      value: "4h",
+                      label: "4h"
                     }
                   ]
                 },
