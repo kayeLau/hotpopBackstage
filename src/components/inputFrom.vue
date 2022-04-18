@@ -16,7 +16,7 @@
             <span class="description"></span>
           </el-tooltip>
         </el-col>
-        <el-col :span="item.span">
+        <el-col :xs="24" :sm="24" :md="24" :lg="15" :xl="10">
           <!-- 滑動框 -->
           <el-slider
             v-if="item.type === 'slider'"
@@ -27,6 +27,7 @@
             :step="item.step"
             :show-stops="item.showStops"
             :format-tooltip="item.format"
+            :class="{ slidercross: item.isCross}"
           />
           <!-- 輸入框 -->
           <el-input
@@ -91,7 +92,7 @@
           </el-select>
         </el-col>
         <el-col v-if="item.showvalue" :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
-          <span>{{ timeFormat(item.value)}}</span>
+          <span :class="{ slidercross: item.isCross}">{{ timeFormat(item.value)}}</span>
         </el-col>
       </el-row>
     </el-card>
@@ -105,7 +106,7 @@
       ></inputFrom>
       <el-row justify="start" class="pd5" v-if="showTimeStepOption">
         <el-button class="add" type="primary" @click="addBookingTimestep">新增時段+</el-button>
-        <el-button class="add" type="danger" @click="addBookingTimestep">刪除時段</el-button>
+        <el-button class="add" type="danger" @click="deleteBookingTimestep">刪除時段</el-button>
       </el-row>
     </div>
     <el-row justify="center" class="pd5" v-if="showButton">
@@ -116,7 +117,8 @@
 <script>
 import { reactive, computed, getCurrentInstance } from "vue";
 import { useRouter } from "vue-router";
-import useSetting  from '../mixin/useSetting'
+import useSetting from "../mixin/useSetting";
+import { ElNotification } from "element-plus";
 export default {
   name: "inputFrom",
   props: {
@@ -140,8 +142,8 @@ export default {
   },
   setup(props) {
     const router = useRouter();
-    const internalInstance = getCurrentInstance();
-    const util = internalInstance.appContext.config.globalProperties.util;
+    const { appContext } = getCurrentInstance();
+    const util = appContext.config.globalProperties.util;
     const { timeFormat } = useSetting();
     let list = reactive([]);
 
@@ -149,13 +151,44 @@ export default {
       return list.filter(item => item.children && item.type === "group");
     });
 
-    // console.log(childrenList);
+    let sliderValueList = computed(() => {
+      return childrenList.value.map(item => item.children[0]);
+    });
+
+    function crossVerify() {
+      let isCross = false;
+      let len = sliderValueList.value && sliderValueList.value.length;
+      if (!len || len <= 1) return isCross;
+      for (let i = 1; i < len; i++) {
+        if (
+          sliderValueList.value[i].value[0] <
+            sliderValueList.value[i - 1].value[1] ||
+          sliderValueList.value[i].value[1] <
+            sliderValueList.value[i - 1].value[1]
+        ) {
+          sliderValueList.value[i].isCross = true;
+          isCross = true;
+        } else {
+          sliderValueList.value[i].isCross = false;
+        }
+      }
+      return isCross;
+    }
 
     props.inputDate.map(item => {
       list.push(item);
     });
 
+    // 提交數據localStorage
     function submitData() {
+      if (crossVerify()) {
+        ElNotification({
+          title: "時段設置出現衝突",
+          message: "時段設置不能重疊,請修改",
+          type: "error"
+        });
+        return;
+      }
       let data = {};
       let localData = JSON.parse(localStorage.getItem(props.id));
       if (props.shopid) {
@@ -166,14 +199,20 @@ export default {
         data = list;
       }
       localStorage.setItem(props.id, JSON.stringify(data));
+      ElNotification({
+        title: "提交成功",
+        message: "數據已經成功保存",
+        type: "success"
+      });
       router.go(-1);
     }
-
+    // 記錄最後修改時間
     function reWriteLastEditTime() {
       if (list[0].key === "lastEditTime") {
         list[0].value = new Date();
       }
     }
+    //複製并新增一份時段
     function addBookingTimestep() {
       props.inputDate.forEach(item => {
         if (item.children && item.name === "訂座時段") {
@@ -182,39 +221,29 @@ export default {
         }
       });
     }
-
+    function deleteBookingTimestep(){
+      let len = childrenList.value && childrenList.value.length;
+      if (!len || len <= 1) return;
+      list.pop();
+    }
+    // 修改截止訂座時間
     function timeselectChangeHandler(val) {
       let value = val.split(":");
       let hour = parseInt(value[0], 10);
       let minute = value[1] === "30" ? 0.5 : 0;
-      list
-        .filter(item => item.children)[0]
-        .children.forEach(item => {
-          item.min = hour + minute;
-        });
+      sliderValueList.value.forEach(item => {
+        item.min = hour + minute;
+      });
     }
 
-    // function timeFormat(val) {
-    //   let res = "";
-    //   if (Array.isArray(val)) {
-    //     val.forEach(item => {
-    //       let minute = String(item).split(".")[1] === "5" ? "30" : "00";
-    //       res += String(item).split(".")[0] + ":" + minute;
-    //       res += " - ";
-    //     });
-    //     res = res.substring(0, res.length - 3);
-    //   } else {
-    //     res = val;
-    //   }
-    //   return res;
-    // }
     return {
       list,
       childrenList,
       submitData,
       timeselectChangeHandler,
       timeFormat,
-      addBookingTimestep
+      addBookingTimestep,
+      deleteBookingTimestep
     };
   }
 };
@@ -263,6 +292,9 @@ h2::before {
   transform: translate(-50%, -50%);
   font-size: 10px;
 }
-.submit {
+
+.slidercross {
+  --el-slider-main-bg-color: var(--el-color-danger);
+  color: var(--el-color-danger);
 }
 </style>

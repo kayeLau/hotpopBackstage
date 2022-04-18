@@ -69,7 +69,7 @@ export default {
     function handleEdit(index, row) {
       $router.push({
         path: "/setting/bookingSetting",
-        query: { shopid: row.id }
+        query: { shopid: row.id },
       });
     }
 
@@ -115,7 +115,6 @@ export default {
             lastEditTime: value[0]?.value || ""
           });
           for (let i = 4; i < localData[key].length; i++) {
-            console.log(value[i].children);
             if (value[i] && value[i].name === "訂座時段" && value[i].children) {
               let last = tableData.length - 1;
               for (let item of value[i].children) {

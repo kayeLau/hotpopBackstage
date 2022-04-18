@@ -75,7 +75,8 @@ export default function(){
               min: 12,
               step: 0.5,
               showmark: true,
-              showvalue: true
+              showvalue: true,
+              isCross:false
             },
             {
               type: "selectgroup",

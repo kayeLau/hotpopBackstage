@@ -1,7 +1,6 @@
 class Util{
     static moneyFormatter(val,fix = 2){
         if(fix < 0)return;
-        console.log(fix)
         let str = String(val.toFixed(fix)); // 控制小數後位數
         let stopPoint = fix === 0 ? str.length : str.indexOf(".");
         let intSum = str.substring(0,stopPoint).replace( /\B(?=(?:\d{3})+$)/g, ',' );// 整数部分
