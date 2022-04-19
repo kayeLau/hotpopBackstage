@@ -3,6 +3,7 @@
     <el-icon :size="50">
       <Icon :icon="item.icon"></Icon>
     </el-icon>
+    <span>{{item.name}}</span>
   </el-menu-item>
 
   <el-sub-menu v-else :index="item.router">
@@ -10,6 +11,7 @@
       <el-icon :size="50">
         <Icon :icon="item.icon"></Icon>
       </el-icon>
+        <span>{{item.name}}</span>
     </template>
       <el-menu-item-group>
         <el-menu-item

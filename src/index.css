@@ -1,54 +1,84 @@
-html{
+/* 變量 */
+html {
   --common-baseont-family: "Roboto", "Noto", sans-serif;
-  --background-color-light:#f3f6fd;
+  --background-color-light: #f3f6fd;
   --el-border-radius-base: 15px;
   font-family: var(--common-baseont-family);
 }
+.page-gird{
+  --grid-column-number: 1fr 1fr;
+}
+.el-drawer{
+  --el-drawer-bg-color:var(--background-color-light)
+}
+.el-drawer__body{
+  --el-drawer-padding-primary:0;
+}
+.el-card {
+  --el-card-border-radius: 15px;
+}
+
+.el-button {
+  --el-border-radius-base: 15px;
+}
+/* 大屏變量 */
+
+/* 小屏變量 */
+@media screen and (max-width: 800px) {
+  .page-gird{
+    --grid-column-number: 1fr;
+  }
+}
+
+/* 樣式 */
 .pd5 {
   padding-bottom: 5px;
 }
+
 .mg10-top {
   margin-top: 10px;
 }
-.el-button+.el-button{
+
+.el-button+.el-button {
   margin-left: 0;
 }
-.el-card{
-  --el-card-border-radius:15px;
+
+.card-picker {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
 }
-.el-button{
-  --el-border-radius-base: 15px;
+
+.card-picker .el-dropdown-link {
+  cursor: pointer;
+  color: var(--el-color-primary);
+  display: flex;
+  align-items: center;
 }
-.card-picker{
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 20px;
-  }
-  .card-picker .el-dropdown-link {
-    cursor: pointer;
-    color: var(--el-color-primary);
-    display: flex;
-    align-items: center;
-  }
-  .box-card{
-    height: 320px;
-  }
-  .box-card-title{
-    font-weight: bold;
-  }
-  .box-card-liquid{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 200px;
-    height: 200px;
-  }
-  .card-header{
-      display: flex;
-      justify-content: space-between;
-  }
-  .box-card-liquid-subtitle{
-    font-weight: 400;
-  }
+
+.box-card {
+  height: 320px;
+}
+
+.box-card-title {
+  font-weight: bold;
+}
+
+.box-card-liquid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 200px;
+  max-height: 200px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.box-card-liquid-subtitle {
+  font-weight: 400;
+}

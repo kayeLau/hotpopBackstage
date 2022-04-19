@@ -7,8 +7,8 @@
             <liquidChart ref="dumpBill" name="dumpBill" title="甩單數量百分比"></liquidChart>
             <liquidChart ref="dumpBillVolum" name="dumpBillVolum" title="損失金額百分比"></liquidChart>
           </div>
-          <textChart title="本月訂單總額" :sales="totalSalesMonth"></textChart>
-          <textChart title="本月成交總額" :sales="totalSalesMonthInPay"></textChart>
+            <textChart title="本月訂單總額" :sales="totalSalesMonth"></textChart>
+            <textChart title="本月成交總額" :sales="totalSalesMonthInPay"></textChart>
         </div>
       </el-card>
     </div>
@@ -165,7 +165,7 @@ export default {
 }
 .page-gird {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: var(--grid-column-number);
   gap: 8px;
 }
 .page-header {
@@ -177,6 +177,7 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  flex-wrap: wrap;
 }
 .liquid-chart{
   display: flex;

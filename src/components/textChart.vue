@@ -27,8 +27,11 @@ export default {
 }
 </script>
 <style scoped>
+.box-card-liquid{
+    padding-top: 15px;
+}
 .box-card-liquid > span{
-    font-size: 50px;
+    font-size: 2rem;
     font-weight: 400;
 }
 </style>
