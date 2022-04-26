@@ -14,6 +14,11 @@ app.use(router)
 app.use(ElementPlus)
 app.config.globalProperties.echarts = echarts;
 app.config.globalProperties.util = Util;
+app.config.globalProperties.$echartsResize = function(ref){
+    window.addEventListener('resize',function () {
+      ref.resize()
+    })
+}
 
 const Icon = (props) => {
     const { icon } = props

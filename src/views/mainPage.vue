@@ -60,16 +60,11 @@ export default {
   components: { subMenu },
   data() {
     return {
-      menuIndex: "/",
+      menuIndex: "/takeawayDataPage",
       screenSize: null,
       showmenu: true,
       isdirclick: false,
       menuList: [
-        {
-          name: "首頁",
-          icon: "HomeFilled",
-          router: "/"
-        },
         {
           name: "數據",
           icon: "Histogram",
@@ -78,10 +73,6 @@ export default {
             {
               name: "外賣數據",
               router: "/takeawayDataPage"
-            },
-            {
-              name: "訂座數據",
-              router: "/bookingDataPage"
             }
           ]
         },
@@ -90,10 +81,6 @@ export default {
           icon: "Setting",
           router: "settingPage",
           children: [
-            {
-              name: "預警配置",
-              router: "/setting/unormalSetting"
-            },
             {
               name: "訂座配置",
               router: "/setting/shopBookingList"
@@ -129,8 +116,9 @@ export default {
 </script>
 <style scoped>
 .main {
-  height: calc(100vh - 80px);
+  height: calc(100vh - 60px);
   overflow-y: scroll;
+  overflow-x: hidden;
   background-color: var(--background-color-light);
 }
 .aside {

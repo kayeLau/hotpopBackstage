@@ -97,13 +97,15 @@
       </el-row>
     </el-card>
     <div v-if="childrenList">
-      <inputFrom
-        v-for="(item,index) of childrenList"
-        :key="index"
-        :name="'時段' + (index + 1)"
-        :inputDate="item.children"
-        :showButton="false"
-      ></inputFrom>
+        <transition-group name="fade" tag="p">
+        <inputFrom
+          v-for="(item,index) of childrenList"
+          :key="index"
+          :name="'時段' + (index + 1)"
+          :inputDate="item.children"
+          :showButton="false"
+        ></inputFrom>
+        </transition-group>
       <el-row justify="start" class="pd5" v-if="showTimeStepOption">
         <el-button class="add" type="primary" @click="addBookingTimestep">新增時段+</el-button>
         <el-button class="add" type="danger" @click="deleteBookingTimestep">刪除時段</el-button>
@@ -115,7 +117,7 @@
   </div>
 </template>
 <script>
-import { reactive, computed, getCurrentInstance } from "vue";
+import { reactive, computed, getCurrentInstance,ref } from "vue";
 import { useRouter } from "vue-router";
 import useSetting from "../mixin/useSetting";
 import { ElNotification } from "element-plus";
@@ -141,6 +143,7 @@ export default {
     }
   },
   setup(props) {
+    let show = ref(true)
     const router = useRouter();
     const { appContext } = getCurrentInstance();
     const util = appContext.config.globalProperties.util;
@@ -214,12 +217,17 @@ export default {
     }
     //複製并新增一份時段
     function addBookingTimestep() {
-      props.inputDate.forEach(item => {
-        if (item.children && item.name === "訂座時段") {
-          let copyitem = util.deepClone(item);
-          list.push(copyitem);
-        }
-      });
+      let len = childrenList.value && childrenList.value.length;
+      if (!len || len < 1) return;
+      let copyitem = util.deepClone(list[list.length-1]);
+      list.push(copyitem);
+
+      // props.inputDate.forEach(item => {
+      //   if (item.children && item.name === "訂座時段") {
+      //     let copyitem = util.deepClone(item);
+      //     list.push(copyitem);
+      //   }
+      // });
     }
     function deleteBookingTimestep(){
       let len = childrenList.value && childrenList.value.length;
@@ -237,6 +245,7 @@ export default {
     }
 
     return {
+      show,
       list,
       childrenList,
       submitData,
@@ -292,9 +301,24 @@ h2::before {
   transform: translate(-50%, -50%);
   font-size: 10px;
 }
-
 .slidercross {
   --el-slider-main-bg-color: var(--el-color-danger);
   color: var(--el-color-danger);
+}
+
+.fade-enter-active{
+  animation: fadeout 0.5s reverse;
+}
+.fade-leave-active{
+  animation: fadeout 0.5s ease-out;
+}
+@keyframes fadeout {
+  0%{
+    opacity: 100;
+  }
+  100%{
+    transform: translateX(80%);
+    opacity: 0;
+  }
 }
 </style>

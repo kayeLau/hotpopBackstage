@@ -39,6 +39,10 @@ html {
   margin-top: 10px;
 }
 
+.mg5-right {
+  margin-right: 5px;
+}
+
 .el-button+.el-button {
   margin-left: 0;
 }

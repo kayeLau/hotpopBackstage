@@ -31,21 +31,14 @@
         </template>
       </el-table-column>
       <el-table-column prop="lastEditTime" label="最後修改時間" />
-      <el-table-column label="Operations" fixed="right">
+      <el-table-column label="Operations" fixed="right" >
         <template #default="scope">
-        <el-row :gutter="20">
-          <el-col :span="4">
-            <el-button size="small" type="primary" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
-          </el-col>
-          <!-- <el-button size="small" @click="handleDelete(scope.$index, scope.row)">read</el-button> -->
-          <el-col :span="4" :offset="5">
+          <el-button class="mg5-right" size="small" type="primary" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
           <el-button
             size="small"
             type="danger"
             @click="handleDelete(scope.$index, scope.row)"
           >Delete</el-button>
-          </el-col>
-        </el-row>
         </template>
       </el-table-column>
     </el-table>
@@ -54,8 +47,9 @@
 </template>
 <script>
 import { useRouter } from "vue-router";
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive,ref } from "vue";
 import useSetting from "../../mixin/useSetting";
+import useWindowSize from "../../mixin/useWindowSize";
 export default {
   name: "shopBookingList",
   setup() {
@@ -65,6 +59,8 @@ export default {
     const { bookingInput,timeFormat } = useSetting();
     let localData = JSON.parse(localStorage.getItem(itemKey));
     let lastshopid;
+    let { getscreenSize } = useWindowSize();
+    let screenSize = ref('big')
 
     function handleEdit(index, row) {
       $router.push({
@@ -132,10 +128,15 @@ export default {
     }
 
     onMounted(() => {
+      window.addEventListener('resize',()=>{
+        screenSize = getscreenSize();
+        console.log(screenSize)
+      })
       getLocalData();
     });
 
     return {
+      screenSize,
       handleEdit,
       handleDelete,
       tableData,

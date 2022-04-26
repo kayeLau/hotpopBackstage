@@ -29,22 +29,24 @@
         </div>
       </div>
     </template>
-    <div :id="name" style="width:100%; height:240px;"></div>
+    <div :id="name" style="width:100%;height:240px"></div>
   </el-card>
 </template>
 <script>
-import { onMounted, getCurrentInstance, ref } from "vue";
+import { onMounted, getCurrentInstance, ref ,nextTick} from "vue";
 export default {
   props: {
     name: String,
     title: String,
     chartIndex: Number
   },
-  setup(props,context) {
+  setup(props, context) {
     const internalInstance = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const util = internalInstance.appContext.config.globalProperties.util;
     let listsort = ref(1);
     let myChart = null;
+    // let chartWidth = ref(0)
     const BASIC_OPTION = {
       legend: {
         show: true,
@@ -63,58 +65,60 @@ export default {
       },
       xAxis: {},
       yAxis: {
-          type: "value",
-          name: "",
-          nameTextStyle: {
-            fontWeight: 200,
-            fontSize: 12
-          },
-          axisTick: {
-            show: false
-          },
-          axisLine: {
-            lineStyle: {
-              color: "#666666",
-              width: 0
-            }
-          },
-          splitLine: {
-            lineStyle: {
-              color: ["#E8E8E8"],
-              type: "dotted"
-            }
-          },
-            axisLabel: {
-              show: true,
-              textStyle: {
-                color: '#666666'
-              },
-              // 將金額傳為中文後綴,解決數字過長問題
-              formatter: (v) => {
-                return util.moneyFormatterInChineseSuffix(v);
-              }
-            }
+        type: "value",
+        name: "",
+        nameTextStyle: {
+          fontWeight: 200,
+          fontSize: 12
         },
+        axisTick: {
+          show: false
+        },
+        axisLine: {
+          lineStyle: {
+            color: "#666666",
+            width: 0
+          }
+        },
+        splitLine: {
+          lineStyle: {
+            color: ["#E8E8E8"],
+            type: "dotted"
+          }
+        },
+        axisLabel: {
+          show: true,
+          textStyle: {
+            color: "#666666"
+          },
+          // 將金額傳為中文後綴,解決數字過長問題
+          formatter: v => {
+            return util.moneyFormatterInChineseSuffix(v);
+          }
+        }
+      },
       label: {},
       tooltip: {
         trigger: "axis"
       }
     };
 
+    // window.onload = ()=>{
+    //   console.log(document.getElementById('box-card'))
+    // }
+    nextTick(()=>{
+      console.log(proxy.$el.clientWidth)
+    })
+
     // 初始化echart
     function init() {
       const echarts =
-        internalInstance.appContext.config.globalProperties.echarts;
+      internalInstance.appContext.config.globalProperties.echarts;
       myChart = echarts.init(document.getElementById(props.name));
+      proxy.$echartsResize(myChart);
     }
     // 繪圖
     function drawChart(chartData) {
-      // if (chartData) {
-      //   sessionStorage.setItem("chartData", JSON.stringify(chartData));
-      //   data = chartData;
-      // } else {
-      //   data = JSON.parse(sessionStorage.getItem("chartData"));
-      // }
       const fullOption = assembleDataToOption(
         getTransactions(chartData),
         gernerateXaxis()
@@ -123,10 +127,16 @@ export default {
     }
     function listChange(value) {
       if (listsort.value === value) return;
-      if(listsort.value === 1){
-        context.emit('updateChartView',{ shop: "616-土瓜灣店",range:'week'})
-      }else{
-        context.emit('updateChartView',{ shop: "616-土瓜灣店",range:'month'})
+      if (listsort.value === 1) {
+        context.emit("updateChartView", {
+          shop: "616-土瓜灣店",
+          range: "week"
+        });
+      } else {
+        context.emit("updateChartView", {
+          shop: "616-土瓜灣店",
+          range: "month"
+        });
       }
       listsort.value = value;
       // drawChart();
@@ -149,16 +159,16 @@ export default {
     }
     //
     function getTransactions(chartData) {
-      let nameList = ['訂單量','成功交易量'];
+      let nameList = ["訂單量", "成功交易量"];
       let list = [];
-      chartData.forEach((item,index) => {
+      chartData.forEach((item, index) => {
         const len = item.length;
         let moneyAmount = 0;
         const detail = {
           symbol: "circle",
           symbolSize: 5,
           type: "line",
-          smooth:true
+          smooth: true
         };
         detail.data = gernerDatelist();
         detail.name = nameList[index];
@@ -170,7 +180,6 @@ export default {
             moneyAmount += moneyAmountFromatter(item[i]);
           } else {
             const dateIndex = getDateIndex(new Date(ordertime));
-            console.log(dateIndex)
             moneyAmount += moneyAmountFromatter(item[i]);
             detail.data[dateIndex] = moneyAmount;
             moneyAmount = 0;
@@ -181,14 +190,6 @@ export default {
       return list;
     }
 
-    // function isThisWeek(day) {
-    //   let today = new Date();
-    //   today.setHours(0);
-    //   let weedday = today.getDay() - 1;
-    //   let time = today.getTime();
-    //   let ans = day.getTime() - time - weedday * 24 * 3600 * 1000;
-    //   return ans > 0 ? true : false;
-    // }
     // 按需生成X軸
     function gernerateXaxis() {
       const weeklist = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
@@ -221,12 +222,13 @@ export default {
     onMounted(() => {
       init();
     });
+
     return {
       listChange,
       listsort,
       drawChart,
     };
-  },
+  }
 };
 </script>
 
