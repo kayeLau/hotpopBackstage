@@ -42,7 +42,6 @@ html {
 .mg5-right {
   margin-right: 5px;
 }
-
 .el-button+.el-button {
   margin-left: 0;
 }
@@ -60,7 +59,29 @@ html {
   display: flex;
   align-items: center;
 }
-
+/* gird布局 */
+.page-gird {
+  display: grid;
+  grid-template-columns: var(--grid-column-number);
+  gap: 8px;
+}
+.page-header {
+  display: grid;
+  grid-template-columns: 1fr;
+  padding-bottom: 15px;
+}
+.page-header-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+.liquid-chart {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+/* box布局 */
 .box-card {
   height: 320px;
 }

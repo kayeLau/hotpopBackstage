@@ -60,11 +60,16 @@ export default {
   components: { subMenu },
   data() {
     return {
-      menuIndex: "/takeawayDataPage",
+      menuIndex: "/",
       screenSize: null,
       showmenu: true,
       isdirclick: false,
       menuList: [
+        {
+          name: "主頁",
+          icon: "HomeFilled",
+          router: "/"
+        },
         {
           name: "數據",
           icon: "Histogram",
