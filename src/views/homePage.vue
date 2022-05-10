@@ -15,8 +15,8 @@
     </el-row>
 
     <div class="page-gird">
-      <el-card :body-style="{ padding:'5px'}" class="item1" v-show="functionBlock.includes('takeawayPreview')">
-        <div class="page-header-box">
+      <el-card :body-style="{ padding:'10px'}" class="item1" v-show="functionBlock.includes('takeawayPreview')" @mousedown="dragElement">
+        <div class="page-header-box" >
           <div class="liquid-chart box-card-liquid-subtitle">
             <liquidChart ref="dumpBillChart" name="dumpBill" title="甩單數量百分比"></liquidChart>
             <liquidChart ref="dumpBillVolumChart" name="dumpBillVolum" title="損失金額百分比"></liquidChart>
@@ -25,6 +25,7 @@
           <textChart title="本月成交總額" :sales="totalSalesMonthInPay"></textChart>
         </div>
       </el-card>
+      
       <shopBookingList class="item1" v-show="functionBlock.includes('shopBookingList')"></shopBookingList>
     </div>
   </div>
@@ -37,6 +38,7 @@ import liquidChart from "../components/liquidChart";
 import textChart from "../components/textChart";
 import loading from "../components/loading";
 import shopBookingList from "./setting/shopBookingList.vue";
+import useMouseMove from "../mixin/useMouseMove";
 export default {
     components: {
     liquidChart,
@@ -50,7 +52,8 @@ export default {
     let totalSalesMonth = ref(0);
     let totalSalesMonthInPay = ref(0);
     let isLoading = ref(true);
-    const functionBlock = ref([]);
+    const functionBlock = ref(["takeawayPreview"]);
+    const { dragElement } = useMouseMove();
     const options = [
       {
         value: "takeawayPreview",
@@ -88,6 +91,10 @@ export default {
       );
     }
 
+    // function dragElement(e){
+      
+    // }
+
     onMounted(async () => {
       let [historyMsg, historyMsgInPay] = await getHistoryMsg({
         shop: "616-土瓜灣店",
@@ -103,7 +110,8 @@ export default {
       totalSalesMonth,
       totalSalesMonthInPay,
       functionBlock,
-      options
+      options,
+      dragElement
     };
   }
 };
@@ -111,5 +119,7 @@ export default {
 <style scoped>
 .item1{
   grid-column-start: span 2;
+  cursor: move;
+  user-select:none;
 }
 </style>
