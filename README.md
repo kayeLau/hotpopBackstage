@@ -8,9 +8,9 @@
 - 訂座及外賣應用的配置修改
 
 ## 截圖
-![image](./pic/p1.jpg)
+![image](/pic/p1.jpg)
 
-![image](./pic/p2.jpg)
+![image](/pic/p2.jpg)
 
-![image](./pic/p3.jpg)
+![image](/pic/p3.jpg)
 
