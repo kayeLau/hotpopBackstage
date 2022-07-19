@@ -91,6 +91,11 @@ export default {
               router: "/setting/shopBookingList"
             }
           ]
+        },
+        {
+          name: "菜單編輯",
+          icon: "Setting",
+          router: "/editProduct"
         }
       ]
     };

@@ -1,9 +1,11 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import takeawayDataPage from '../views/takeawayDataPage.vue'
-import homePage from '../views/homePage.vue'
-import shopBookingList from '../views/setting/shopBookingList.vue'
-import settingPage from '../views/setting/unormalSetting.vue'
-import bookingSetting from '../views/setting/bookingSetting.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import takeawayDataPage from '../views/takeawayDataPage.vue';
+import homePage from '../views/homePage.vue';
+import shopBookingList from '../views/setting/shopBookingList.vue';
+import settingPage from '../views/setting/unormalSetting.vue';
+import bookingSetting from '../views/setting/bookingSetting.vue';
+import editProduct from '../views/editProduct/editProduct.vue';
+import editProductDetail from '../views/editProduct/editProductDetail.vue';
 
 const routes = [
   {
@@ -30,6 +32,16 @@ const routes = [
     path: '/setting/shopBookingList',
     name: 'shopBookingList',
     component: shopBookingList
+  },
+  {
+    path: '/editProduct',
+    name: 'editProduct',
+    component: editProduct
+  },
+  {
+    path: '/editProductDetail',
+    name: 'editProductDetail',
+    component: editProductDetail
   }
 ]
 

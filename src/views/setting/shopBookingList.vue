@@ -77,7 +77,7 @@ export default {
     }
     function personformatter(val){
       if(!val)return ''
-      return val + '位'
+      return val + '位';
     }
 
     function generateShopID() {
